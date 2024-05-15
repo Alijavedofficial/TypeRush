@@ -88,13 +88,20 @@ export default function App() {
 
     setInput(newValue);
   };
-
+  
+//Updated the WPM calculation logic to ensure accurate calculation based on the time taken and word count. Fixed issues with startTime and endTime initialization and ensured proper state updates for calculating WPM.
   const calculateWPM = () => {
     if (!startTime || !endTime) return 0;
-    const timeTaken = (endTime - startTime) / 60000;
-    const wordCount = currentText.split(" ").length;
-    return (wordCount / timeTaken).toFixed(2);
+  const timeTaken = (endTime - startTime) / 60000;
+  const wordCount = input.trim().match(/\S+/g)?.length || 0;
+  return (wordCount / timeTaken).toFixed(0);
   };
+  
+  useEffect(() => {
+    if (isCompleted) {
+      setEndTime(Date.now()); // Set endTime when typing is completed
+    }
+  }, [isCompleted]);
 
   const calculatePoints = (mistakes: number) => {
     const textLength = currentText.replace(/\s/g, "").length;
@@ -211,3 +218,4 @@ export default function App() {
     </div>
   );
 }
+
